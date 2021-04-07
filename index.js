@@ -1,7 +1,7 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
+const path = require('./output')
 
-const Employee = require('./lib/employee');
 const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
@@ -9,7 +9,7 @@ const Intern = require('./lib/intern');
 const managerQuestions = require('./src/manager-questions');
 const engineerQuestions = require('./src/engineer-questions');
 const internQuestions = require('./src/intern-questions');
-const pageTemplate = require('./src/page-template');
+generateHTML() = require('./src/page-template');
 
 
 const OUTPUT_DIR = path.resolve(__dirname, 'output');
@@ -51,7 +51,7 @@ function init() {
 
     function addEngineer() {
         inquirer.prompt(engineerQuestions)
-        .then((userResponse) => {
+        .then((data) => {
             let engineer = new Engineer;
             team.push(engineer);
             createTeam();
@@ -60,7 +60,7 @@ function init() {
 
     function addIntern() {
         inquirer.prompt(internQuestions)
-        .then((userResponse) => {
+        .then((data) => {
             let intern = new Intern;
             team.push(intern);
             createTeam();
