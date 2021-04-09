@@ -1,68 +1,12 @@
-const managerCard = `<div class='card'>
-<div class='card-body'
-    <h5 class='card-title'>${userResponse.name}</h5>
-    <h6 class='card-subtitle text-muted'>Manager</h6>
-    <ul class='list-group list-group-flush'>
-        <li class='list-group-item>${userResponse.id}</li>
-        <li class='list-group-item>${userResponse.email}</li>
-        <li class='list-group-item>${userResponse.officeNumber}</li>
-    </ul>
-</div>
-</div>`
-const engineerCard = `<div class='card'>
-<div class='card-body'
-    <h5 class='card-title'>${userResponse.name}</h5>
-    <h6 class='card-subtitle text-muted'>Engineer</h6>
-    <ul class='list-group list-group-flush'>
-        <li class='list-group-item>${userResponse.id}</li>
-        <li class='list-group-item>${userResponse.email}</li>
-        <li class='list-group-item>${userResponse.github}</li>
-    </ul>
-</div>
-</div>`
-const internCard = `<div class='card'>
-<div class='card-body'
-    <h5 class='card-title'>${userResponse.name}</h5>
-    <h6 class='card-subtitle text-muted'>Intern</h6>
-    <ul class='list-group list-group-flush'>
-        <li class='list-group-item>${userResponse.id}</li>
-        <li class='list-group-item>${userResponse.email}</li>
-        <li class='list-group-item>${userResponse.school}</li>
-    </ul>
-</div>
-</div>`
+const fs = require('fs');
+
+const path = require('path');
+const OUTPUT_DIR = path.resolve(__dirname, 'output');
+const outpathPath = path.join(OUTPUT_DIR, 'team.html');
 
 
-function createTeam(team) {
-
-    function createManager(manager) {
-        return managerCard
-    }
-
-    function createEngineer(engineer) {
-        return engineerCard
-    }
-
-    function createIntern(intern) {
-        return internCard
-    }
-
-    function getRole() {
-        if (role === 'Manager') {
-            createManager()
-        } else if (role === 'Engineer') {
-            createEngineer()
-        } else {
-            createIntern()
-        }
-    }
-
-    team.map(getRole);
-    team.map().join('');
-    
-}
-
-const generateHTML = (team) =>
+function generateHTML(team, OUTPUT_DIR) {
+    let HTML =
 `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,6 +20,67 @@ const generateHTML = (team) =>
         <div class='jumbotron>
             <h1>My Team</h1>
         </div>
-    </div>` + createTeam(team) + `</body></html`
+    </div>`;
 
-module.exports = generateHTML()
+team.forEach(Employee) => {
+    HTML += `<div class='card'>
+<div class='card-body'
+    <h5 class='card-title'>${Employee.name}</h5>
+    ${getRole(Employee)}
+    <ul class='list-group list-group-flush'>
+        <li class='list-group-item>
+            <span>ID: </span>
+            <span>${Employee.id}</span>
+        </li>
+        <li class='list-group-item>
+            <span>Email: </span>
+            <span><a href="mailto:${Employee.email}">${Employee.email}</span>
+        </li>
+        <li class='list-group-item>
+            ${getExtra(Employee)}
+        </li>
+    </ul>
+</div>
+</div>`
+});
+
+HTML += `</div>
+    </body>
+    </html>`
+
+    generateMainHTML(HTML, OUTPUT_DIR);
+}
+
+function getRole(Employee) {
+    switch (Employee.role) {
+        case "Manager":
+            return `<h6 class='card-subtitle text-muted'>${Employee.role}</h6>`
+        case "Engineer":
+            return `<h6 class='card-subtitle text-muted'>${Employee.role}</h6>`
+        case "Intern":
+            return `<h6 class='card-subtitle text-muted'>${Employee.role}</h6>`
+    }
+}
+
+function getExtra(employee) {
+    switch (employee, role) {
+        case 'Manager':
+            return `<span>Office Number: </span><span>${employee.officeNumber}</span>`;
+        case 'Engineer':
+            return `<span>Github: </span><span><a href="https://github.com/${employee.github}">github.com/${employee.github}</a></span>`;
+        case 'Intern':
+            return `<span>School: </span><span>${employee.school}</span>`;
+    }
+}
+
+function generateMainHTML(html, filePath) {
+    const dir = path.join(filePath, 'dist');
+    fs.mkdir(dir, { recursive: true }, (err) => {
+        err ? console.error(err) : process.chdir(dir);
+        fs.writeFileSync('team.html', html);
+    });
+}
+
+
+
+module.exports.generateHTML = generateHTML;

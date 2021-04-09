@@ -1,22 +1,22 @@
 module.exports = [
         {
             type: 'input',
-            name: 'name',
+            name: 'intName',
             message: 'Please enter name.',
         },
         {
             type: 'input',
-            name: 'id',
+            name: 'intId',
             message: 'Please enter employeen ID.',
         },
         {
             type: 'input',
-            name: 'email',
+            name: 'intEmail',
             message: 'Please enter email address.',
         },
         {
             type: 'input',
-            name: 'school',
+            name: 'intSchool',
             message: 'Please enter school.',
         },
     ];

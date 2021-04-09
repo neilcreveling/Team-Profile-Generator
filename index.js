@@ -1,16 +1,15 @@
 const fs = require('fs');
+const path = require('path');
 const inquirer = require('inquirer');
-const path = require('./output')
 
 const Manager = require('./lib/manager');
 const Engineer = require('./lib/engineer');
 const Intern = require('./lib/intern');
 
-const managerQuestions = require('./src/manager-questions');
-const engineerQuestions = require('./src/engineer-questions');
-const internQuestions = require('./src/intern-questions');
-generateHTML() = require('./src/page-template');
-
+const managerQuestions = require('./src/manager-questions.js');
+const engineerQuestions = require('./src/engineer-questions.js');
+const internQuestions = require('./src/intern-questions.js');
+const pageTemplate = require('./src/page-template.js');
 
 const OUTPUT_DIR = path.resolve(__dirname, 'output');
 const outputPath = path.join(OUTPUT_DIR, 'team.html');
@@ -21,8 +20,13 @@ function init() {
 
     function createManager() {
         inquirer.prompt(managerQuestions)
-        .then((userResponse) => {
-            let manager = new Manager;
+        .then((man) => {
+            let manager = new Manager(
+                man.manName,
+                man.manId,
+                man.manEmail,
+                man.manOfficeNumber
+            )
             team.push(manager);
             createTeam();
         });
@@ -51,8 +55,13 @@ function init() {
 
     function addEngineer() {
         inquirer.prompt(engineerQuestions)
-        .then((data) => {
-            let engineer = new Engineer;
+        .then((eng) => {
+            let engineer = new Engineer(
+                eng.engName,
+                eng.engId,
+                eng.engEmail,
+                eng.Git
+            );
             team.push(engineer);
             createTeam();
         });
@@ -60,15 +69,20 @@ function init() {
 
     function addIntern() {
         inquirer.prompt(internQuestions)
-        .then((data) => {
-            let intern = new Intern;
+        .then((int) => {
+            let intern = new Intern(
+                int.intName,
+                int.intId,
+                int.intEmail,
+                int.intSchool
+            );
             team.push(intern);
             createTeam();
         });
     }
 
-    createOutput() {
-        let data = generateHTML(team);
+    function createOutput() {
+        let data = pageTemplate;
         fs.write(outputPath, data, 'utf-8');
     }
 
